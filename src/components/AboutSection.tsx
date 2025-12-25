@@ -16,7 +16,7 @@ export default function AboutSection() {
               </h2>
               
               <p className="text-xl text-text-secondary leading-relaxed">
-                Dengan pengalaman lebih dari 5 tahun dalam bidang pendidikan, 
+                Dengan pengalaman lebih dari 2 tahun dalam bidang pendidikan, 
                 kami telah membantu ribuan siswa mencapai target akademik mereka 
                 melalui metode pembelajaran yang inovatif dan personal.
               </p>

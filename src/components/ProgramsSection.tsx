@@ -3,7 +3,7 @@ const programs = [
     id: 1,
     title: "Calistung (Membaca, Menulis & Berhitung)",
     description: "Program dasar untuk anak usia dini (TK/SD) guna membangun fondasi kemampuan literasi dan numerasi yang kuat.",
-    features: ["Metode Belajar Sambil Bermain", "Modul Interaktif", "Pengajar yang berpengalaman di bidangnya"],
+    features: ["Metode Belajar Sambil Bermain", "Modul Interaktif", "Pengajar yang berpengalaman"],
     price: "Rp 125.000",
     duration: "per sesi (60-90 menit)",
     icon: "✏️"

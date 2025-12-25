@@ -82,22 +82,22 @@ export default function AboutSection() {
               
               <div className="grid grid-cols-2 gap-6">
                 <div className="text-center p-6 bg-white rounded-2xl shadow-sm">
-                  <div className="text-4xl font-bold text-primary mb-2">5+</div>
+                  <div className="text-4xl font-bold text-primary mb-2">2+</div>
                   <div className="text-text-secondary">Tahun Pengalaman</div>
                 </div>
                 
                 <div className="text-center p-6 bg-white rounded-2xl shadow-sm">
-                  <div className="text-4xl font-bold text-primary mb-2">2000+</div>
-                  <div className="text-text-secondary">Siswa Lulus</div>
+                  <div className="text-4xl font-bold text-primary mb-2">50+</div>
+                  <div className="text-text-secondary">Siswa Terbantu</div>
                 </div>
                 
                 <div className="text-center p-6 bg-white rounded-2xl shadow-sm">
-                  <div className="text-4xl font-bold text-primary mb-2">50+</div>
+                  <div className="text-4xl font-bold text-primary mb-2">25+</div>
                   <div className="text-text-secondary">Tutor Ahli</div>
                 </div>
                 
                 <div className="text-center p-6 bg-white rounded-2xl shadow-sm">
-                  <div className="text-4xl font-bold text-primary mb-2">95%</div>
+                  <div className="text-4xl font-bold text-primary mb-2">90%</div>
                   <div className="text-text-secondary">Tingkat Kepuasan</div>
                 </div>
               </div>
@@ -107,18 +107,19 @@ export default function AboutSection() {
             <div className="bg-white rounded-2xl p-8 shadow-lg border border-text-secondary/10">
               <div className="flex items-center space-x-4 mb-6">
                 <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center">
-                  <span className="text-2xl">👨‍🎓</span>
+                  <span className="text-2xl">👩‍🦰</span>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-text-primary">Ahmad Rizki</h4>
-                  <p className="text-text-secondary text-sm">Siswa SMA, Lulus PTN Favorit</p>
+                  <h4 className="font-semibold text-text-primary">Ibu Ratna Sari</h4>
+                  <p className="text-text-secondary text-sm">Orang Tua dari Alif (6 Tahun)</p>
                 </div>
               </div>
               
               <p className="text-text-secondary italic leading-relaxed">
-                "Miracle Private Class benar-benar mengubah cara saya belajar. 
-                Tutor yang sabar dan metode yang mudah dipahami membuat saya 
-                berhasil masuk universitas impian!"
+                "Sangat bersyukur bertemu Miracle Private Class. 
+                Dulu Alif sulit sekali diajak fokus belajar membaca, tapi dengan tutor yang sangat sabar 
+                dan metode yang menyenangkan, sekarang dia sudah lancar membaca 
+                dan antusias setiap jadwal les tiba!"
               </p>
               
               <div className="flex items-center mt-4">

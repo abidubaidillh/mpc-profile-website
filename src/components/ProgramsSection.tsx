@@ -3,14 +3,14 @@ const programs = [
     id: 1,
     title: "Calistung (Membaca, Menulis & Berhitung)",
     description: "Program dasar untuk anak usia dini (TK/SD) guna membangun fondasi kemampuan literasi dan numerasi yang kuat.",
-    features: ["Metode Belajar Sambil Bermain", "Modul Interaktif", "Pendampingan Sabar & Telaten"],
+    features: ["Metode Belajar Sambil Bermain", "Modul Interaktif", "Pengajar yang berpengalaman di bidangnya"],
     price: "Rp 125.000",
     duration: "per sesi (60-90 menit)",
     icon: "✏️"
   },
   {
     id: 2,
-    title: "Mengaji (Metode Qiro'ah & Iqro)",
+    title: "Mengaji (Anak - Dewasa)",
     description: "Bimbingan baca tulis Al-Qur'an dengan tajwid yang benar melalui metode praktis yang mudah diikuti anak-anak.",
     features: ["Fokus Tajwid & Makhraj", "Hafalan Doa Harian", "Evaluasi Tahapan Iqro"],
     price: "Rp 100.000",
@@ -46,7 +46,7 @@ const programs = [
   },
   {
     id: 6,
-    title: "IPA/IPS",
+    title: "Pembelajaran Umum",
     description: "Bimbingan terpadu untuk mata pelajaran sains dan sosial guna mempersiapkan siswa menghadapi ujian sekolah.",
     features: ["Rangkuman Materi Padat", "Eksperimen Sederhana (IPA)", "Pemahaman Konsep Terstruktur"],
     price: "Rp 145.000",
@@ -57,7 +57,7 @@ const programs = [
 
 export default function ProgramsSection() {
   return (
-    <section id="programs" className="py-20 bg-gray-50">
+    <section id="programs" className="py-20 bg-gray-50 scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -115,7 +115,7 @@ export default function ProgramsSection() {
             href="https://wa.me/6282197150696?text=Halo%20Admin%20Miracle%20Private,%20saya%20ingin%20konsultasi%20untuk%20program%20custom%20sesuai%20kebutuhan%20saya."
             target="_blank"
             rel="noopener noreferrer"
-            className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 py-3 rounded-lg font-semibold transition-all duration-200 inline-block"
+            className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 py-3 rounded-lg font-semibold transition-all duration-200 inline-block touch-manipulation min-h-[44px] flex items-center justify-center"
           >
             Konsultasi Program Custom
           </a>

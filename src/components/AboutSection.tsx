@@ -1,6 +1,6 @@
 export default function AboutSection() {
   return (
-    <section id="about" className="py-20 bg-white">
+    <section id="about" className="py-20 bg-white scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Content */}
@@ -44,7 +44,7 @@ export default function AboutSection() {
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-text-primary mb-2">Tutor Berkualitas Tinggi</h3>
-                  <p className="text-text-secondary">Tim pengajar kami terdiri dari lulusan universitas terbaik dengan pengalaman mengajar minimal 3 tahun dan track record yang terbukti.</p>
+                  <p className="text-text-secondary">Tim pengajar kami terdiri dari lulusan universitas terbaik dengan pengalaman mengajar di bidangnya masing masing</p>
                 </div>
               </div>
 
@@ -67,7 +67,7 @@ export default function AboutSection() {
                 href="https://wa.me/6282197150696?text=Halo%20Admin%20Miracle%20Private,%20saya%20tertarik%20untuk%20bergabung%20dan%20ingin%20tanya%20lebih%20lanjut."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 shadow-lg hover:shadow-xl inline-block"
+                className="bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 shadow-lg hover:shadow-xl inline-block touch-manipulation min-h-[44px] flex items-center justify-center"
               >
                 Bergabung Sekarang
               </a>
@@ -87,7 +87,7 @@ export default function AboutSection() {
                 </div>
                 
                 <div className="text-center p-6 bg-white rounded-2xl shadow-sm">
-                  <div className="text-4xl font-bold text-primary mb-2">50+</div>
+                  <div className="text-4xl font-bold text-primary mb-2">100+</div>
                   <div className="text-text-secondary">Siswa Terbantu</div>
                 </div>
                 
@@ -97,7 +97,7 @@ export default function AboutSection() {
                 </div>
                 
                 <div className="text-center p-6 bg-white rounded-2xl shadow-sm">
-                  <div className="text-4xl font-bold text-primary mb-2">90%</div>
+                  <div className="text-4xl font-bold text-primary mb-2">95%</div>
                   <div className="text-text-secondary">Tingkat Kepuasan</div>
                 </div>
               </div>

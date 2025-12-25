@@ -1,6 +1,6 @@
 export default function HeroSection() {
   return (
-    <section id="home" className="min-h-screen bg-white flex items-center relative overflow-hidden">
+    <section id="home" className="min-h-screen bg-white flex items-center relative overflow-hidden scroll-mt-20">
       {/* Decorative Elements */}
       <div className="absolute top-20 right-10 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
       <div className="absolute bottom-20 left-10 w-48 h-48 bg-primary/5 rounded-full blur-3xl"></div>
@@ -31,7 +31,7 @@ export default function HeroSection() {
                 href="https://wa.me/6282197150696?text=Halo%20Admin%20Miracle%20Private,%20saya%20tertarik%20ingin%20tanya%20lebih%20lanjut%20mengenai%20program%20lesnya."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 shadow-lg hover:shadow-xl text-center inline-block"
+                className="bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 shadow-lg hover:shadow-xl text-center inline-block touch-manipulation min-h-[44px] flex items-center justify-center"
               >
                 Mulai Belajar Sekarang
               </a>
@@ -39,7 +39,7 @@ export default function HeroSection() {
                 href="https://wa.me/6282197150696?text=Halo%20Admin%20Miracle%20Private,%20saya%20tertarik%20ingin%20konsultasi%20gratis%20mengenai%20program%20belajar."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="border-2 border-text-secondary text-text-primary hover:border-primary hover:text-primary px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 text-center inline-block"
+                className="border-2 border-text-secondary text-text-primary hover:border-primary hover:text-primary px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 text-center inline-block touch-manipulation min-h-[44px] flex items-center justify-center"
               >
                 Konsultasi Gratis
               </a>

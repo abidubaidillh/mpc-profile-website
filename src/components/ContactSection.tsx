@@ -2,6 +2,29 @@
 
 import { useState } from 'react';
 
+// Environment variables with fallbacks
+const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '6282197150696';
+const COMPANY_EMAIL = process.env.NEXT_PUBLIC_COMPANY_EMAIL || 'miracleprivateclass99@gmail.com';
+const HONEYPOT_FIELD = process.env.NEXT_PUBLIC_HONEYPOT_FIELD || 'website__';
+
+// Validation functions
+const validateEmail = (email: string): boolean => {
+  if (!email) return true; // Empty is allowed (optional)
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+const validateWhatsApp = (phone: string): boolean => {
+  // Indonesian phone number: starts with 08, 10-13 digits total
+  const phoneRegex = /^08\d{8,12}$/;
+  return phoneRegex.test(phone.replace(/\D/g, ''));
+};
+
+// Lightweight sanitization
+const sanitizeInput = (input: string): string => {
+  return input.replace(/[<>]/g, '');
+};
+
 export default function ContactSection() {
   const [formData, setFormData] = useState({
     nama: '',
@@ -9,54 +32,131 @@ export default function ContactSection() {
     program: '',
     whatsapp: '',
     email: '',
-    pesan: ''
+    pesan: '',
+    [HONEYPOT_FIELD]: '', // Honeypot field
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: sanitizeInput(value)
     }));
+    
+    // Clear validation error for this field
+    if (validationErrors[name]) {
+      setValidationErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validateForm = (): boolean => {
+    const errors: Record<string, string> = {};
+    
+    if (!formData.nama.trim()) {
+      errors.nama = 'Nama lengkap wajib diisi';
+    }
+    
+    if (!formData.whatsapp.trim()) {
+      errors.whatsapp = 'Nomor WhatsApp wajib diisi';
+    } else if (!validateWhatsApp(formData.whatsapp)) {
+      errors.whatsapp = 'Format nomor WhatsApp tidak valid (contoh: 081234567890)';
+    }
+    
+    if (!formData.kelas) {
+      errors.kelas = 'Kelas wajib dipilih';
+    }
+    
+    if (!formData.program) {
+      errors.program = 'Program wajib dipilih';
+    }
+    
+    if (formData.email && !validateEmail(formData.email)) {
+      errors.email = 'Format email tidak valid';
+    }
+    
+    // Honeypot validation: should be empty
+    if (formData[HONEYPOT_FIELD].trim() !== '') {
+      // Silent fail for bots - don't show error message
+      errors[HONEYPOT_FIELD] = 'bot';
+    }
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validasi form
-    if (!formData.nama || !formData.whatsapp || !formData.kelas || !formData.program) {
-      alert('Mohon lengkapi data yang wajib diisi (Nama, WhatsApp, Kelas, dan Program)');
+    if (!validateForm()) {
       return;
     }
+    
+    setIsSubmitting(true);
+    
+    try {
+      // Log form submission to server
+      const logData = {
+        nama: formData.nama,
+        whatsapp: formData.whatsapp,
+        kelas: formData.kelas,
+        program: formData.program,
+        email: formData.email || undefined,
+        pesan: formData.pesan || undefined,
+        honeypot: formData[HONEYPOT_FIELD] || undefined,
+      };
+      
+      // Send log to server (fire and forget - don't block user)
+      fetch('/api/log', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(logData),
+      }).catch(error => {
+        console.error('Failed to log form submission:', error);
+        // Silently fail - don't show error to user
+      });
+      
+      // Format pesan WhatsApp
+      let message = `Halo Admin Miracle, Saya ${formData.nama}, ingin konsultasi untuk anak saya kelas ${formData.kelas} untuk program ${formData.program}.`;
+      
+      if (formData.pesan) {
+        message += `\n\nPesan tambahan: ${formData.pesan}`;
+      }
+      
+      message += `\n\nKontak WhatsApp: ${formData.whatsapp}`;
+      if (formData.email) {
+        message += `\nEmail: ${formData.email}`;
+      }
 
-    // Format pesan WhatsApp
-    let message = `Halo Admin Miracle, Saya ${formData.nama}, ingin konsultasi untuk anak saya kelas ${formData.kelas} untuk program ${formData.program}.`;
-    
-    if (formData.pesan) {
-      message += `\n\nPesan tambahan: ${formData.pesan}`;
+      // Encode pesan untuk URL
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
+      
+      // Buka WhatsApp di tab baru
+      window.open(whatsappUrl, '_blank');
+      
+      // Reset form setelah submit
+      setFormData({
+        nama: '',
+        kelas: '',
+        program: '',
+        whatsapp: '',
+        email: '',
+        pesan: '',
+        [HONEYPOT_FIELD]: '',
+      });
+    } catch (error) {
+      console.error('Error in form submission:', error);
+    } finally {
+      setIsSubmitting(false);
     }
-    
-    message += `\n\nKontak WhatsApp: ${formData.whatsapp}`;
-    if (formData.email) {
-      message += `\nEmail: ${formData.email}`;
-    }
-
-    // Encode pesan untuk URL
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/6282197150696?text=${encodedMessage}`;
-    
-    // Buka WhatsApp di tab baru
-    window.open(whatsappUrl, '_blank');
-    
-    // Reset form setelah submit
-    setFormData({
-      nama: '',
-      kelas: '',
-      program: '',
-      whatsapp: '',
-      email: '',
-      pesan: ''
-    });
   };
 
   return (
@@ -82,6 +182,20 @@ export default function ContactSection() {
             <h3 className="text-2xl font-bold text-text-primary mb-6">Konsultasi Gratis</h3>
             
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Honeypot field - hidden from users */}
+              <div className="hidden">
+                <label htmlFor={HONEYPOT_FIELD}>Leave this field empty</label>
+                <input
+                  type="text"
+                  id={HONEYPOT_FIELD}
+                  name={HONEYPOT_FIELD}
+                  value={formData[HONEYPOT_FIELD]}
+                  onChange={handleInputChange}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
+
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-text-primary font-medium mb-2">
@@ -92,10 +206,13 @@ export default function ContactSection() {
                     name="nama"
                     value={formData.nama}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-text-secondary/30 rounded-lg focus:outline-none focus:border-primary transition-colors"
+                    className={`w-full px-4 py-3 border ${validationErrors.nama ? 'border-red-500' : 'border-text-secondary/30'} rounded-lg focus:outline-none focus:border-primary transition-colors`}
                     placeholder="Masukkan nama lengkap"
-                    required
+                    disabled={isSubmitting}
                   />
+                  {validationErrors.nama && (
+                    <p className="text-red-500 text-sm mt-1">{validationErrors.nama}</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-text-primary font-medium mb-2">
@@ -106,10 +223,13 @@ export default function ContactSection() {
                     name="whatsapp"
                     value={formData.whatsapp}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-text-secondary/30 rounded-lg focus:outline-none focus:border-primary transition-colors"
+                    className={`w-full px-4 py-3 border ${validationErrors.whatsapp ? 'border-red-500' : 'border-text-secondary/30'} rounded-lg focus:outline-none focus:border-primary transition-colors`}
                     placeholder="08xxxxxxxxxx"
-                    required
+                    disabled={isSubmitting}
                   />
+                  {validationErrors.whatsapp && (
+                    <p className="text-red-500 text-sm mt-1">{validationErrors.whatsapp}</p>
+                  )}
                 </div>
               </div>
 
@@ -121,9 +241,13 @@ export default function ContactSection() {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-text-secondary/30 rounded-lg focus:outline-none focus:border-primary transition-colors"
+                    className={`w-full px-4 py-3 border ${validationErrors.email ? 'border-red-500' : 'border-text-secondary/30'} rounded-lg focus:outline-none focus:border-primary transition-colors`}
                     placeholder="nama@email.com"
+                    disabled={isSubmitting}
                   />
+                  {validationErrors.email && (
+                    <p className="text-red-500 text-sm mt-1">{validationErrors.email}</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-text-primary font-medium mb-2">
@@ -133,8 +257,8 @@ export default function ContactSection() {
                     name="kelas"
                     value={formData.kelas}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-text-secondary/30 rounded-lg focus:outline-none focus:border-primary transition-colors"
-                    required
+                    className={`w-full px-4 py-3 border ${validationErrors.kelas ? 'border-red-500' : 'border-text-secondary/30'} rounded-lg focus:outline-none focus:border-primary transition-colors`}
+                    disabled={isSubmitting}
                   >
                     <option value="">Pilih Kelas</option>
                     <option value="TK A">TK A</option>
@@ -152,6 +276,9 @@ export default function ContactSection() {
                     <option value="SMA Kelas 11">SMA Kelas 11</option>
                     <option value="SMA Kelas 12">SMA Kelas 12</option>
                   </select>
+                  {validationErrors.kelas && (
+                    <p className="text-red-500 text-sm mt-1">{validationErrors.kelas}</p>
+                  )}
                 </div>
               </div>
 
@@ -163,8 +290,8 @@ export default function ContactSection() {
                   name="program"
                   value={formData.program}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-text-secondary/30 rounded-lg focus:outline-none focus:border-primary transition-colors"
-                  required
+                  className={`w-full px-4 py-3 border ${validationErrors.program ? 'border-red-500' : 'border-text-secondary/30'} rounded-lg focus:outline-none focus:border-primary transition-colors`}
+                  disabled={isSubmitting}
                 >
                   <option value="">Pilih Program</option>
                   <option value="Calistung (Membaca, Menulis & Berhitung)">Calistung (Membaca, Menulis & Berhitung)</option>
@@ -175,6 +302,9 @@ export default function ContactSection() {
                   <option value="Pembelajaran Umum">Pembelajaran Umum</option>
                   <option value="Request Pembelajaran">Request Pembelajaran</option>
                 </select>
+                {validationErrors.program && (
+                  <p className="text-red-500 text-sm mt-1">{validationErrors.program}</p>
+                )}
               </div>
 
               <div>
@@ -186,14 +316,26 @@ export default function ContactSection() {
                   rows={4}
                   className="w-full px-4 py-3 border border-text-secondary/30 rounded-lg focus:outline-none focus:border-primary transition-colors resize-none"
                   placeholder="Ceritakan kebutuhan belajar anak Anda..."
+                  disabled={isSubmitting}
                 ></textarea>
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-primary hover:bg-primary-dark text-white py-4 rounded-lg font-semibold text-lg transition-all duration-200 shadow-lg hover:shadow-xl touch-manipulation min-h-[44px] flex items-center justify-center"
+                disabled={isSubmitting}
+                className={`w-full bg-primary hover:bg-primary-dark text-white py-4 rounded-lg font-semibold text-lg transition-all duration-200 shadow-lg hover:shadow-xl touch-manipulation min-h-[44px] flex items-center justify-center ${isSubmitting ? 'opacity-75 cursor-not-allowed' : ''}`}
               >
-                Kirim Konsultasi Gratis
+                {isSubmitting ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Mengirim...
+                  </>
+                ) : (
+                  'Kirim Konsultasi Gratis'
+                )}
               </button>
             </form>
           </div>
@@ -210,7 +352,7 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <h4 className="font-semibold text-text-primary mb-1">Telepon & WhatsApp</h4>
-                  <p className="text-text-secondary">+62 821-9715-0696</p>
+                  <p className="text-text-secondary">+{WHATSAPP_NUMBER.substring(0, 2)} {WHATSAPP_NUMBER.substring(2, 5)}-{WHATSAPP_NUMBER.substring(5, 9)}-{WHATSAPP_NUMBER.substring(9)}</p>
                   <p className="text-text-secondary text-sm">Tersedia 24/7 untuk konsultasi</p>
                 </div>
               </div>
@@ -223,7 +365,7 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <h4 className="font-semibold text-text-primary mb-1">Email</h4>
-                  <p className="text-text-secondary">miracleprivateclass99@gmail.com</p>
+                  <p className="text-text-secondary">{COMPANY_EMAIL}</p>
                   <p className="text-text-secondary text-sm">Respon dalam 2 jam kerja</p>
                 </div>
               </div>
@@ -254,7 +396,7 @@ export default function ContactSection() {
               
               <div className="space-y-4">
                 <a 
-                  href="https://wa.me/6282197150696?text=Halo%20Admin%20Miracle%20Private,%20saya%20tertarik%20ingin%20tanya%20lebih%20lanjut%20mengenai%20program%20lesnya."
+                  href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Halo Admin Miracle Private, saya tertarik ingin tanya lebih lanjut mengenai program lesnya.')}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full flex items-center justify-center space-x-3 bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition-all duration-200 touch-manipulation min-h-[44px]"
@@ -266,7 +408,7 @@ export default function ContactSection() {
                 </a>
                 
                 <a 
-                  href="https://wa.me/6282197150696?text=Halo%20Admin%20Miracle%20Private,%20saya%20ingin%20jadwalkan%20konsultasi%20untuk%20membahas%20program%20belajar."
+                  href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Halo Admin Miracle Private, saya ingin jadwalkan konsultasi untuk membahas program belajar.')}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full flex items-center justify-center space-x-3 border-2 border-primary text-primary hover:bg-primary hover:text-white py-3 rounded-lg font-semibold transition-all duration-200 touch-manipulation min-h-[44px]"

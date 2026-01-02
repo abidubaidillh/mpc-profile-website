@@ -19,7 +19,6 @@ export default function Home() {
       <AboutSection />
       <TestimoniSection />
       <FAQSection />
-      <BlogSection />
       <ContactSection />
       <Footer />
     </main>

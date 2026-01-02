@@ -1,43 +1,54 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const navLinks = [
-  { href: '#home', label: 'Beranda' },
-  { href: '#programs', label: 'Program' },
-  { href: '#about', label: 'Tentang Kami' },
-  { href: '#testimoni', label: 'Testimoni' },
-  { href: '#faq', label: 'FAQ' },
-  { href: '#blog', label: 'Blog' },
-  { href: '#contact', label: 'Kontak' },
+  { href: '/#home', label: 'Beranda', type: 'hash' },
+  { href: '/#programs', label: 'Program', type: 'hash' },
+  { href: '/#about', label: 'Tentang Kami', type: 'hash' },
+  { href: '/#testimoni', label: 'Testimoni', type: 'hash' },
+  { href: '/#faq', label: 'FAQ', type: 'hash' },
+  { href: '/blog', label: 'Blog', type: 'page' },
+  { href: '/#contact', label: 'Kontak', type: 'hash' },
 ];
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('home');
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
-      // Scrollspy logic
-      const sectionIds = navLinks.map(link => link.href.replace('#', ''));
-      let current = sectionIds[0];
-      for (const id of sectionIds) {
-        const el = document.getElementById(id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= 80) {
-            current = id;
+      // Scrollspy logic - only works on home page
+      if (pathname === '/') {
+        const sectionIds = navLinks.map(link => {
+          if (link.type === 'hash') {
+            return link.href.replace('/#', '');
+          }
+          return '';
+        }).filter(id => id !== '');
+        
+        let current = 'home';
+        for (const id of sectionIds) {
+          const el = document.getElementById(id);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            if (rect.top <= 80) {
+              current = id;
+            }
           }
         }
+        setActiveSection(current);
       }
-      setActiveSection(current);
     };
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // initial
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [pathname]);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -57,6 +68,15 @@ export default function Navbar() {
     setIsMobileMenuOpen(false);
   };
 
+  const handleHashLinkClick = (e: React.MouseEvent, href: string) => {
+    // If we're not on the home page, navigate to home page with hash
+    if (pathname !== '/') {
+      e.preventDefault();
+      window.location.href = href;
+    }
+    closeMobileMenu();
+  };
+
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       isScrolled 
@@ -67,22 +87,39 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <h1 className="text-2xl font-bold text-text-primary">
+            <Link href="/" className="text-2xl font-bold text-text-primary hover:text-primary transition-colors">
               Miracle <span className="text-primary">Private Class</span>
-            </h1>
+            </Link>
           </div>
 
           {/* Desktop Navigation Menu */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8">
               {navLinks.map(link => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className={`text-text-primary hover:text-primary transition-colors duration-200 font-medium ${activeSection === link.href.replace('#', '') ? 'text-primary font-bold underline underline-offset-4' : ''}`}
-                >
-                  {link.label}
-                </a>
+                link.type === 'hash' ? (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`text-text-primary hover:text-primary transition-colors duration-200 font-medium ${activeSection === link.href.replace('/#', '') && pathname === '/' ? 'text-primary font-bold underline underline-offset-4' : ''}`}
+                    onClick={(e) => {
+                      if (pathname !== '/') {
+                        e.preventDefault();
+                        window.location.href = link.href;
+                      }
+                    }}
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`text-text-primary hover:text-primary transition-colors duration-200 font-medium ${pathname === link.href ? 'text-primary font-bold underline underline-offset-4' : ''}`}
+                    onClick={closeMobileMenu}
+                  >
+                    {link.label}
+                  </Link>
+                )
               ))}
             </div>
           </div>
@@ -124,14 +161,27 @@ export default function Navbar() {
           <div className="md:hidden absolute top-16 left-0 right-0 bg-white/95 backdrop-blur-md shadow-lg border-t border-text-secondary/20 z-50">
             <div className="px-4 py-6 space-y-4">
               {navLinks.map(link => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={closeMobileMenu}
-                  className={`block text-text-primary hover:text-primary transition-colors duration-200 font-medium py-3 px-4 rounded-lg hover:bg-primary/5 touch-manipulation ${activeSection === link.href.replace('#', '') ? 'text-primary font-bold underline underline-offset-4' : ''}`}
-                >
-                  {link.label}
-                </a>
+                link.type === 'hash' ? (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={(e) => {
+                      handleHashLinkClick(e, link.href);
+                    }}
+                    className={`block text-text-primary hover:text-primary transition-colors duration-200 font-medium py-3 px-4 rounded-lg hover:bg-primary/5 touch-manipulation ${activeSection === link.href.replace('/#', '') && pathname === '/' ? 'text-primary font-bold underline underline-offset-4' : ''}`}
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={closeMobileMenu}
+                    className={`block text-text-primary hover:text-primary transition-colors duration-200 font-medium py-3 px-4 rounded-lg hover:bg-primary/5 touch-manipulation ${pathname === link.href ? 'text-primary font-bold underline underline-offset-4' : ''}`}
+                  >
+                    {link.label}
+                  </Link>
+                )
               ))}
               {/* Mobile Login Portal Button */}
               <div className="pt-4 border-t border-text-secondary/20">

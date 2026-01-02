@@ -8,7 +8,7 @@ import Footer from '@/components/Footer';
 import FAQSection from '@/components/FAQ/FAQSection';
 import BlogSection from '@/components/Blog/BlogSection';
 import TestimoniSection from '@/components/Testimoni/TestimoniSection';
-import WhatsAppForm from '@/components/WhatsAppForm';
+
 
 export default function Home() {
   return (
@@ -18,7 +18,6 @@ export default function Home() {
       <ProgramsSection />
       <AboutSection />
       <TestimoniSection />
-      <WhatsAppForm />
       <FAQSection />
       <BlogSection />
       <ContactSection />

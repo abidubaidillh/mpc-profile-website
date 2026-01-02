@@ -1,4 +1,10 @@
+"use client";
+import { useState } from 'react';
+import dynamic from 'next/dynamic';
+const WhatsAppForm = dynamic(() => import('./WhatsAppForm'), { ssr: false });
+
 export default function HeroSection() {
+  const [showForm, setShowForm] = useState(false);
   return (
     <section id="home" className="min-h-screen bg-white flex items-center relative overflow-hidden scroll-mt-20">
       {/* Decorative Elements */}
@@ -27,14 +33,13 @@ export default function HeroSection() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <a 
-                href="https://wa.me/6282197150696?text=Halo%20Admin%20Miracle%20Private,%20saya%20tertarik%20ingin%20tanya%20lebih%20lanjut%20mengenai%20program%20lesnya."
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={() => setShowForm(true)}
                 className="bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 shadow-lg hover:shadow-xl text-center inline-block touch-manipulation min-h-[44px] flex items-center justify-center"
               >
-                Mulai Belajar Sekarang
-              </a>
+                Daftar Sekarang
+              </button>
               <a 
                 href="https://wa.me/6282197150696?text=Halo%20Admin%20Miracle%20Private,%20saya%20tertarik%20ingin%20konsultasi%20gratis%20mengenai%20program%20belajar."
                 target="_blank"
@@ -44,6 +49,21 @@ export default function HeroSection() {
                 Konsultasi Gratis
               </a>
             </div>
+            {showForm && (
+              <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/40">
+                <div className="relative w-full max-w-2xl mx-auto">
+                  <button
+                    type="button"
+                    aria-label="Tutup Formulir"
+                    onClick={() => setShowForm(false)}
+                    className="absolute top-2 right-2 z-10 bg-white/80 hover:bg-primary text-primary hover:text-white rounded-full p-2 shadow-md border border-primary transition-colors"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                  </button>
+                  <WhatsAppForm />
+                </div>
+              </div>
+            )}
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-8 pt-8 border-t border-text-secondary/20">

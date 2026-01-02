@@ -78,9 +78,10 @@ export default function Footer() {
               <li><a href="#home" className="text-gray-300 hover:text-primary transition-colors duration-200">Beranda</a></li>
               <li><a href="#programs" className="text-gray-300 hover:text-primary transition-colors duration-200">Program</a></li>
               <li><a href="#about" className="text-gray-300 hover:text-primary transition-colors duration-200">Tentang Kami</a></li>
+              <li><a href="#testimoni" className="text-gray-300 hover:text-primary transition-colors duration-200">Testimoni</a></li>
+              <li><a href="#faq" className="text-gray-300 hover:text-primary transition-colors duration-200">FAQ</a></li>
+              <li><a href="#blog" className="text-gray-300 hover:text-primary transition-colors duration-200">Blog</a></li>
               <li><a href="#contact" className="text-gray-300 hover:text-primary transition-colors duration-200">Kontak</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-primary transition-colors duration-200">Blog</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-primary transition-colors duration-200">Testimoni</a></li>
             </ul>
           </div>
 
@@ -112,7 +113,7 @@ export default function Footer() {
               <a href="#" className="text-gray-300 hover:text-primary transition-colors duration-200">
                 Syarat & Ketentuan
               </a>
-              <a href="#" className="text-gray-300 hover:text-primary transition-colors duration-200">
+              <a href="#faq" className="text-gray-300 hover:text-primary transition-colors duration-200">
                 FAQ
               </a>
             </div>

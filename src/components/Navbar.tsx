@@ -2,16 +2,40 @@
 
 import { useState, useEffect } from 'react';
 
+const navLinks = [
+  { href: '#home', label: 'Beranda' },
+  { href: '#programs', label: 'Program' },
+  { href: '#about', label: 'Tentang Kami' },
+  { href: '#testimoni', label: 'Testimoni' },
+  { href: '#faq', label: 'FAQ' },
+  { href: '#blog', label: 'Blog' },
+  { href: '#contact', label: 'Kontak' },
+];
+
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>('home');
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
+      // Scrollspy logic
+      const sectionIds = navLinks.map(link => link.href.replace('#', ''));
+      let current = sectionIds[0];
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 80) {
+            current = id;
+          }
+        }
+      }
+      setActiveSection(current);
     };
-
     window.addEventListener('scroll', handleScroll);
+    handleScroll(); // initial
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -51,18 +75,15 @@ export default function Navbar() {
           {/* Desktop Navigation Menu */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8">
-              <a href="#home" className="text-text-primary hover:text-primary transition-colors duration-200 font-medium">
-                Beranda
-              </a>
-              <a href="#programs" className="text-text-primary hover:text-primary transition-colors duration-200 font-medium">
-                Program
-              </a>
-              <a href="#about" className="text-text-primary hover:text-primary transition-colors duration-200 font-medium">
-                Tentang Kami
-              </a>
-              <a href="#contact" className="text-text-primary hover:text-primary transition-colors duration-200 font-medium">
-                Kontak
-              </a>
+              {navLinks.map(link => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className={`text-text-primary hover:text-primary transition-colors duration-200 font-medium ${activeSection === link.href.replace('#', '') ? 'text-primary font-bold underline underline-offset-4' : ''}`}
+                >
+                  {link.label}
+                </a>
+              ))}
             </div>
           </div>
 
@@ -102,35 +123,16 @@ export default function Navbar() {
         {isMobileMenuOpen && (
           <div className="md:hidden absolute top-16 left-0 right-0 bg-white/95 backdrop-blur-md shadow-lg border-t border-text-secondary/20 z-50">
             <div className="px-4 py-6 space-y-4">
-              <a 
-                href="#home" 
-                onClick={closeMobileMenu}
-                className="block text-text-primary hover:text-primary transition-colors duration-200 font-medium py-3 px-4 rounded-lg hover:bg-primary/5 touch-manipulation"
-              >
-                Beranda
-              </a>
-              <a 
-                href="#programs" 
-                onClick={closeMobileMenu}
-                className="block text-text-primary hover:text-primary transition-colors duration-200 font-medium py-3 px-4 rounded-lg hover:bg-primary/5 touch-manipulation"
-              >
-                Program
-              </a>
-              <a 
-                href="#about" 
-                onClick={closeMobileMenu}
-                className="block text-text-primary hover:text-primary transition-colors duration-200 font-medium py-3 px-4 rounded-lg hover:bg-primary/5 touch-manipulation"
-              >
-                Tentang Kami
-              </a>
-              <a 
-                href="#contact" 
-                onClick={closeMobileMenu}
-                className="block text-text-primary hover:text-primary transition-colors duration-200 font-medium py-3 px-4 rounded-lg hover:bg-primary/5 touch-manipulation"
-              >
-                Kontak
-              </a>
-              
+              {navLinks.map(link => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={closeMobileMenu}
+                  className={`block text-text-primary hover:text-primary transition-colors duration-200 font-medium py-3 px-4 rounded-lg hover:bg-primary/5 touch-manipulation ${activeSection === link.href.replace('#', '') ? 'text-primary font-bold underline underline-offset-4' : ''}`}
+                >
+                  {link.label}
+                </a>
+              ))}
               {/* Mobile Login Portal Button */}
               <div className="pt-4 border-t border-text-secondary/20">
                 <a 

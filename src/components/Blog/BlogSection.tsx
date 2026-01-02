@@ -41,10 +41,10 @@ export default function BlogSection() {
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {blogPosts.map((post, idx) => (
-            <a key={idx} href={post.link} className="block bg-white rounded-2xl shadow hover:shadow-2xl border border-text-secondary/10 transition-all duration-300 p-6 group">
-              <div className="mb-4 h-36 bg-primary/10 rounded-xl flex items-center justify-center text-4xl text-primary">
+            <a key={idx} href={post.link} className="block bg-white rounded-2xl shadow hover:shadow-2xl border border-text-secondary/10 transition-all duration-300 p-6 group" aria-label={`Baca artikel: ${post.title}`}>
+              <div className="mb-4 h-36 bg-primary/10 rounded-xl flex items-center justify-center text-4xl text-primary" aria-label="Ilustrasi artikel pendidikan">
                 {/* Placeholder for image */}
-                <span>📚</span>
+                <span role="img" aria-label="Buku">📚</span>
               </div>
               <h3 className="text-xl font-bold text-text-primary group-hover:text-primary mb-2">{post.title}</h3>
               <p className="text-text-secondary mb-4">{post.excerpt}</p>

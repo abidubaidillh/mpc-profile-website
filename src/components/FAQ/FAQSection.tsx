@@ -40,15 +40,15 @@ export default function FAQSection() {
     <section id="faq" className="py-20 bg-white scroll-mt-20">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center px-4 py-2 bg-primary/10 rounded-full mb-4">
-            <span className="text-primary font-medium text-sm">❓ FAQ</span>
+          <div className="inline-flex items-center px-4 py-2 bg-primary/10 rounded-full mb-4" aria-label="FAQ section">
+            <span className="text-primary font-medium text-sm" role="img" aria-label="Tanda tanya">❓ FAQ</span>
           </div>
           <h2 className="text-4xl font-bold text-text-primary mb-4">Pertanyaan yang Sering Diajukan</h2>
           <p className="text-text-secondary text-lg">Temukan jawaban atas pertanyaan umum tentang layanan Miracle Private Class.</p>
         </div>
         <div className="space-y-4">
           {faqData.map((item, idx) => (
-            <div key={idx} className="border border-text-secondary/20 rounded-xl overflow-hidden bg-gray-50">
+            <div key={idx} className="border border-text-secondary/20 rounded-xl overflow-hidden bg-gray-50" aria-label={`FAQ: ${item.question}`}> 
               <button
                 className="w-full flex justify-between items-center px-6 py-5 text-left focus:outline-none focus:ring-2 focus:ring-primary transition-colors group"
                 onClick={() => toggleFAQ(idx)}

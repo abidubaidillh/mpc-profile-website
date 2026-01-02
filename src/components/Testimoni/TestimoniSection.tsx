@@ -37,15 +37,15 @@ export default function TestimoniSection() {
           {testimoniData.map((item, idx) => (
             <div key={idx} className="bg-gray-50 border border-text-secondary/10 rounded-2xl p-8 shadow hover:shadow-xl transition-all duration-300">
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-2xl mr-4">
-                  <span>👤</span>
+                <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-2xl mr-4" aria-label="Avatar testimoni">
+                  <span role="img" aria-label="Avatar">👤</span>
                 </div>
                 <div>
                   <h4 className="font-semibold text-text-primary">{item.name}</h4>
                   <p className="text-text-secondary text-sm">{item.relation}</p>
                 </div>
               </div>
-              <p className="text-text-secondary italic mb-4">"{item.message}"</p>
+              <p className="text-text-secondary italic mb-4" aria-label={`Testimoni dari ${item.name}`}>"{item.message}"</p>
               <div className="flex items-center">
                 {[...Array(item.rating)].map((_, i) => (
                   <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">

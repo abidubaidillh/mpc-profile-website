@@ -52,11 +52,11 @@ export default function HeroSection() {
                 <div className="text-text-secondary">Siswa Aktif</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-primary">20+</div>
+                <div className="text-3xl font-bold text-primary">25+</div>
                 <div className="text-text-secondary">Tutor Ahli</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-primary">90%</div>
+                <div className="text-3xl font-bold text-primary">95%</div>
                 <div className="text-text-secondary">Tingkat Keberhasilan</div>
               </div>
             </div>

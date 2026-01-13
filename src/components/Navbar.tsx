@@ -127,7 +127,7 @@ export default function Navbar() {
           {/* Desktop Login Portal Button */}
           <div className="hidden md:block">
             <a 
-              href="https://app.miracleprivate.com/login"
+              href="https://miracleprivateclass.com/"
               target="_blank"
               rel="noopener noreferrer"
               className="border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-200 px-6 py-2 rounded-lg font-medium inline-block"
